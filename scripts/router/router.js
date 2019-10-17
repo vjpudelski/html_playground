@@ -38,7 +38,6 @@ export default class Router {
           }, null);
 
         route = this.routes[i];
-        console.log(route);
         break;
       }
     }
@@ -50,5 +49,6 @@ export default class Router {
   goToRoute (path) {
     let nav = this.getRoute(path);
     this.rootElem.innerHTML = nav.route.component.render(nav.params);
+    nav.route.component.init();
   }
 }

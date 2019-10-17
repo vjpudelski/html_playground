@@ -8,7 +8,7 @@ export default class UserPage {
   render (props) {
     let user = this.users.find(x => x.id == props.id);
     
-    return `
+    return /*html*/`
       <h1>User Page</h1>
       <h3>User (${ user.username }) with the id of ${ user.id }</h3>
     `;
