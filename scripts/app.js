@@ -1,12 +1,25 @@
-'use strict';
+import Router from './router/router.js';
 
-(function () {
-  function init() {
-    var router = new Router([
-      new Route('/', 'home.html', true),
-      new Route('/about', 'about.html'),
-      new Route('/user/:id', 'user.html') // not working
-    ], 'app');
+import home from '../views/home.js';
+import about from '../views/about.js';
+import user from '../views/user.js';
+
+let router = new Router('history', [
+  {
+    name: '/',
+    component: new home(),
+    default: true
+  },
+  {
+    name: '/about',
+    component: new about()
+  },
+  {
+    name: '/user/:id',
+    component: new user()
   }
-  init();
-}());
+], 'app');
+
+window.addEventListener('hashchange', (e) => {
+  router.goToRoute(e.target.location.hash.substr(1));
+});

@@ -1,69 +1,54 @@
-'use strict';
-
-function Router(routes, rootElem){
-  try{
-    if (!routes) {
-      throw 'eror: need to know where to go and how to get there';
-    }
-
-    this.constructor ('history', routes, rootElem);
-    this.init();
-  } catch(e) {
-    console.error(e);
-  }
-}
-
-Router.prototype = {
-  mode: undefined,
-  routes: undefined, 
-  rootElem: undefined,
-  defaultRoute: undefined,
-  constructor: function (mode, routes, rootElem) {
+export default class Router {
+  constructor (mode, routes, rootElem) {
     this.mode = mode && mode == 'history' && !!(history.pushState) ? 'history' : 'hash';
     this.routes = routes;
     this.rootElem = document.getElementById(rootElem);
 
     for(var i = 0, length = routes.length; i < length; i++){
-      var route = routes[i];
+      let route = routes[i];
       if (route.default){
         this.defaultRoute = route;
       }
-    }   
-  },
-  init: function () {
-    var r = this.routes;
-    (function (scope, r) {
-      window.addEventListener('hashchange', (e) => {
-        scope.hasChanged(scope, r);
-      });
+    }
 
-      // history mode code... 
-      // window.addEventListener('popstate', (e) => {
-      //   console.log(window.location.pathname);
-      //   console.log(e.state);
-      //   goToRoute(e.state.htmlName);
-      // });
-      // history.pushState({}, route.name, window.location.origin + route.name);
+    this.goToRoute(this.defaultRoute.name);
+  }
 
-    })(this, r);
-    this.hasChanged(this, r);
-  },
-  hasChanged: function (scope, r) {
-    var route = undefined;
-    for(var i = 0, length = r.length; i < length; i++){
-      if (r[i].isActiveRoute(window.location.hash.substr(1))) {
-        route = r[i];
+  getRoute (path) {
+    let route = undefined;
+
+    let paramsNames = [];
+    let params = {};
+
+    for(var i = 0, length = this.routes.length; i < length; i++){
+      let regexPath = this.routes[i].name.replace(/([:*])(\w+)/g, 
+      (full, colon, name) => {
+        paramsNames.push(name);
+        return '([^\/]+)';
+      }) + '(?:\/|$)';
+
+      let matchPath = path.match(new RegExp(regexPath));
+      if (matchPath !== null){
+        params = matchPath
+          .splice(1)
+          .reduce((params, value, index) => {
+            if (params === null) params = {}
+            params[paramsNames[index]] = value;
+            return params;
+          }, null);
+
+        route = this.routes[i];
+        console.log(route);
         break;
       }
     }
 
     route = route ? route : this.defaultRoute;
+    return {route, params}
+  }
 
-    scope.goToRoute(route);
-  },
-  goToRoute: function (route) {
-    (function(scope) {
-      route.renderView(scope.rootElem)
-    })(this);
+  goToRoute (path) {
+    let nav = this.getRoute(path);
+    this.rootElem.innerHTML = nav.route.component.render(nav.params);
   }
 }
