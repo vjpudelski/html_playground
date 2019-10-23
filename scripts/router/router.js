@@ -11,10 +11,30 @@ export default class Router {
       }
     }
 
-    this.goToRoute(this.defaultRoute.name);
+    this.getRouteFromWindow();
+    this.addEventListeners();
   }
 
-  getRoute (path) {
+  addEventListeners () {
+    window.addEventListener('hashchange', (e) => {
+      console.log(e.target.location);
+      this.goToRoute(e.target.location.hash.substr(1));
+    });
+  }
+
+  getRouteFromWindow () {
+    let path = window.location.hash.substr(1);
+    if (path != "")
+    {
+      this.goToRoute(path);
+    }
+    else{
+      this.goToRoute(this.defaultRoute.name);
+    }
+  }
+
+  getRouteFromPath (path) {
+    console.log("Path: " + path);
     let route = undefined;
 
     let paramsNames = [];
@@ -42,12 +62,13 @@ export default class Router {
       }
     }
 
+    console.log(route);
     route = route ? route : this.defaultRoute;
     return {route, params}
   }
 
   goToRoute (path) {
-    let nav = this.getRoute(path);
+    let nav = this.getRouteFromPath(path);
     this.rootElem.innerHTML = nav.route.component.render(nav.params);
     nav.route.component.init();
   }

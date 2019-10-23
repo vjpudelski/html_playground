@@ -1,6 +1,5 @@
 export default class HomePage {
   init () {
-    console.log("init");
     document.getElementById('sayhi')
     .addEventListener('click', () => {
       console.log('hi');

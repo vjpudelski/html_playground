@@ -5,6 +5,8 @@ export default class UserPage {
     this.users = users;
   }
 
+  init () {}
+
   render (props) {
     let user = this.users.find(x => x.id == props.id);
     
