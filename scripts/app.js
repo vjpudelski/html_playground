@@ -24,3 +24,5 @@ let router = new Router('history', [
     component: new usersdb()
   }
 ], 'app');
+
+sessionStorage.setItem('apiURL', 'https://localhost:5001');

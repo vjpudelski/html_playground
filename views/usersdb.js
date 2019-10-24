@@ -31,14 +31,14 @@ export default class UserPage {
         var xmlhttp = new XMLHttpRequest();
 
         xmlhttp.onreadystatechange = function() {
+            console.log("onreadystatechange" + this.readyState);
             if (this.readyState === 4 && this.status === 200) {
-                console.log(this.responseText);   
                 instance.users = JSON.parse(this.responseText);
                 instance.renderUsers();         
             }
         };
         
-        xmlhttp.open('GET', 'https://localhost:5001/api/users/');
+        xmlhttp.open('GET', sessionStorage.getItem('apiURL') + '/api/users/');
         xmlhttp.send();
     }
 
@@ -55,9 +55,8 @@ export default class UserPage {
             }
         };
         
-        xmlhttp.open('POST', 'https://localhost:5001/api/users/');
+        xmlhttp.open('POST', sessionStorage.getItem('apiURL') + '/api/users/');
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(`{"username": "${user.value}"}`);
     }
 }
-  
