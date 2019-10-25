@@ -1,0 +1,22 @@
+{
+  "name": "html_playground",
+  "version": "1.0.0",
+  "description": "html website with little to no libraries and frameworks",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vjpudelski/html_playground.git"
+  },
+  "author": "Victor J. Pudelski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vjpudelski/html_playground/issues"
+  },
+  "homepage": "https://github.com/vjpudelski/html_playground#readme",
+  "devDependencies": {
+    "eslint": "^6.5.1"
+  }
+}

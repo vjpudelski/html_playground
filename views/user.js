@@ -1,7 +1,7 @@
 import {users} from '../data/users.js';
 
 export default class UserPage {
-  constructor() {
+  constructor () {
     this.users = users;
   }
 

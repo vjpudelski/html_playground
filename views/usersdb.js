@@ -1,62 +1,64 @@
 export default class UserPage {
-    users = null;
+  constructor () {
+    this.users = null;
+  }
 
-    init () {
-        this.getUsers();
-        document.getElementById("usersdb.add")
-            .addEventListener('click', (event) => this.addUser());
-    }
+  init () {
+    this.getUsers();
+    document.getElementById('usersdb.add')
+      .addEventListener('click', () => this.addUser());
+  }
 
-    render (props) {
-        return /*html*/`
+  render () {
+    return /*html*/`
         <h1>Users Page</h1>
         <input id="usersdb.userToAdd" />
         <button id="usersdb.add">Add</button>
         <ul id="usersdb.users">
         </ul>
         `;
-    }
+  }
 
-    renderUsers () {
-        document.getElementById("usersdb.users").innerHTML = `
-            ${this.users ? 
-                this.users.map(user => /*html*/`<li>${user.userName}</li>`)
-                .join('')
-                : ''
-            }` 
-    }
+  renderUsers () {
+    document.getElementById('usersdb.users').innerHTML = `
+      ${this.users ? 
+        this.users.map(user => /*html*/`<li>${user.userName}</li>`)
+          .join('')
+        : ''
+      }`; 
+  }
 
-    getUsers () {
-        var instance = this;
-        var xmlhttp = new XMLHttpRequest();
+  getUsers () {
+    var instance = this;
+    var xmlhttp = new XMLHttpRequest();
 
-        xmlhttp.onreadystatechange = function() {
-            console.log("onreadystatechange" + this.readyState);
-            if (this.readyState === 4 && this.status === 200) {
-                instance.users = JSON.parse(this.responseText);
-                instance.renderUsers();         
-            }
-        };
+    xmlhttp.onreadystatechange = () => {
+      console.log('onreadystatechange' + this.readyState);
+      if (this.readyState === 4 && this.status === 200) {
+        instance.users = JSON.parse(this.responseText);
+        instance.renderUsers();         
+      }
+    };
         
-        xmlhttp.open('GET', sessionStorage.getItem('apiURL') + '/api/users/');
-        xmlhttp.send();
-    }
+    xmlhttp.open('GET', sessionStorage.getItem('apiURL') + '/api/users/');
+    xmlhttp.send();
+  }
 
-    addUser () {
-        var instance = this;
-        let user = document.getElementById("usersdb.userToAdd")
+  addUser () {
+    var instance = this;
+    let user = document.getElementById('usersdb.userToAdd');
 
-        var xmlhttp = new XMLHttpRequest();
+    var xmlhttp = new XMLHttpRequest();
 
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState === 4 && this.status === 200) {
-                user.value = '';
-                instance.getUsers();
-            }
-        };
+    xmlhttp.onreadystatechange = () => {
+      if (this.readyState === 4 && this.status === 200) {
+        user.value = '';
+        instance.getUsers();
+      }
+    };
         
-        xmlhttp.open('POST', sessionStorage.getItem('apiURL') + '/api/users/');
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(`{"username": "${user.value}"}`);
-    }
+    xmlhttp.open('POST', sessionStorage.getItem('apiURL') + '/api/users/');
+    xmlhttp.setRequestHeader('Content-Type', 'application/json');
+    xmlhttp.send(`{"username": "${user.value}"}`);
+  }
 }

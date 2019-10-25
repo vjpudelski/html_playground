@@ -24,7 +24,7 @@ export default class Router {
 
   getRouteFromWindow () {
     let path = window.location.hash.substr(1);
-    if (path != "")
+    if (path != '')
     {
       this.goToRoute(path);
     }
@@ -34,7 +34,7 @@ export default class Router {
   }
 
   getRouteFromPath (path) {
-    console.log("Path: " + path);
+    console.log('Path: ' + path);
     let route = undefined;
 
     let paramsNames = [];
@@ -42,17 +42,17 @@ export default class Router {
 
     for(var i = 0, length = this.routes.length; i < length; i++){
       let regexPath = this.routes[i].name.replace(/([:*])(\w+)/g, 
-      (full, colon, name) => {
-        paramsNames.push(name);
-        return '([^\/]+)';
-      }) + '(?:\/|$)';
+        (full, colon, name) => {
+          paramsNames.push(name);
+          return '([^\/]+)';  // eslint-disable-line no-useless-escape
+        }) + '(?:\/|$)';      // eslint-disable-line no-useless-escape
 
       let matchPath = path.match(new RegExp(regexPath));
       if (matchPath !== null){
         params = matchPath
           .splice(1)
           .reduce((params, value, index) => {
-            if (params === null) params = {}
+            if (params === null) params = {};
             params[paramsNames[index]] = value;
             return params;
           }, null);
@@ -64,7 +64,7 @@ export default class Router {
 
     console.log(route);
     route = route ? route : this.defaultRoute;
-    return {route, params}
+    return {route, params};
   }
 
   goToRoute (path) {
