@@ -22,7 +22,7 @@ export default class UserPage {
   renderUsers () {
     document.getElementById('usersdb.users').innerHTML = `
       ${this.users ? 
-        this.users.map(user => /*html*/`<li>${user.userName}</li>`)
+        this.users.map(user => /*html*/`<my-user>${user.userName}</my-user>`)
           .join('')
         : ''
       }`; 
@@ -33,9 +33,8 @@ export default class UserPage {
     var xmlhttp = new XMLHttpRequest();
 
     xmlhttp.onreadystatechange = () => {
-      console.log('onreadystatechange' + this.readyState);
-      if (this.readyState === 4 && this.status === 200) {
-        instance.users = JSON.parse(this.responseText);
+      if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+        instance.users = JSON.parse(xmlhttp.responseText);
         instance.renderUsers();         
       }
     };
@@ -51,7 +50,7 @@ export default class UserPage {
     var xmlhttp = new XMLHttpRequest();
 
     xmlhttp.onreadystatechange = () => {
-      if (this.readyState === 4 && this.status === 200) {
+      if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
         user.value = '';
         instance.getUsers();
       }

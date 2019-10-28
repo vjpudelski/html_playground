@@ -17,7 +17,6 @@ export default class Router {
 
   addEventListeners () {
     window.addEventListener('hashchange', (e) => {
-      console.log(e.target.location);
       this.goToRoute(e.target.location.hash.substr(1));
     });
   }
@@ -34,7 +33,6 @@ export default class Router {
   }
 
   getRouteFromPath (path) {
-    console.log('Path: ' + path);
     let route = undefined;
 
     let paramsNames = [];
@@ -62,7 +60,6 @@ export default class Router {
       }
     }
 
-    console.log(route);
     route = route ? route : this.defaultRoute;
     return {route, params};
   }
