@@ -1,3 +1,17 @@
+import api from '../scripts/api.js';
+
+const html = () => /*html*/`
+  <h1>Users Page</h1>
+  <input id="usersdb.userToAdd" />
+  <button id="usersdb.add">Add</button>
+  <ul id="usersdb.users">
+  </ul>
+`;
+
+const html_user = (user) => /*html*/`
+  <my-user listStyle='square'>${user.userName}</my-user>
+`;
+
 export default class UserPage {
   constructor () {
     this.users = null;
@@ -10,54 +24,50 @@ export default class UserPage {
   }
 
   render () {
-    return /*html*/`
-        <h1>Users Page</h1>
-        <input id="usersdb.userToAdd" />
-        <button id="usersdb.add">Add</button>
-        <ul id="usersdb.users">
-        </ul>
-        `;
+    return html();
   }
 
   renderUsers () {
     document.getElementById('usersdb.users').innerHTML = `
       ${this.users ? 
-        this.users.map(user => /*html*/`<my-user>${user.userName}</my-user>`)
+        this.users.map(user => html_user(user))
           .join('')
         : ''
       }`; 
   }
 
   getUsers () {
-    var instance = this;
-    var xmlhttp = new XMLHttpRequest();
-
-    xmlhttp.onreadystatechange = () => {
-      if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-        instance.users = JSON.parse(xmlhttp.responseText);
-        instance.renderUsers();         
-      }
-    };
-        
-    xmlhttp.open('GET', sessionStorage.getItem('apiURL') + '/api/users/');
-    xmlhttp.send();
+    api.getUsers()
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          return Promise.reject({
+            status: response.status,
+            statusText: response.statusText
+          });
+        }
+      })
+      .then(data => {
+        console.log(data);
+        this.users = data;
+        this.renderUsers();
+      })
+      .catch(error => {
+        console.log(`Error: ${error.status} - ${error.statusText}`);
+      });
   }
 
   addUser () {
-    var instance = this;
     let user = document.getElementById('usersdb.userToAdd');
 
-    var xmlhttp = new XMLHttpRequest();
-
-    xmlhttp.onreadystatechange = () => {
-      if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+    api.addUser(`{"username": "${user.value}"}`)
+      .then(() => {
         user.value = '';
-        instance.getUsers();
-      }
-    };
-        
-    xmlhttp.open('POST', sessionStorage.getItem('apiURL') + '/api/users/');
-    xmlhttp.setRequestHeader('Content-Type', 'application/json');
-    xmlhttp.send(`{"username": "${user.value}"}`);
+        this.getUsers();
+      })
+      .catch(error => {
+        console.log(`Error: ${error.status} - ${error.statusText}`);
+      });
   }
 }

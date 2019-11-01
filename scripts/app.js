@@ -24,5 +24,3 @@ let router = new Router('history', [  // eslint-disable-line no-unused-vars
     component: new usersdb()
   }
 ], 'app');
-
-sessionStorage.setItem('apiURL', 'https://localhost:5001');

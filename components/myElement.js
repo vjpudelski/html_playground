@@ -1,12 +1,14 @@
 class MyElement extends HTMLElement {
-  constructor() {
+  constructor () {
     super();
     this.attachShadow({mode: 'open'});
+    let listStyle = this.getAttribute('listStyle') ? this.getAttribute('listStyle') : 'cicle';
+
     this.shadowRoot.innerHTML = /*html*/`
       <style>
         .myUser {
           color: #ff0000;
-          list-style-type: circle;
+          list-style-type: ${listStyle};
         }
       </style>
       <div>
@@ -14,9 +16,11 @@ class MyElement extends HTMLElement {
       </div>
     `;
   }
-  connectedCallback() {  }
-  disconnectedCallback() {  }
+  connectedCallback () {  }
+  disconnectedCallback () {  }
 
-  attributeChangeCallback() {  }
+  attributeChangeCallback () {  }
+
+  adoptedCallback () { }
 }
 customElements.define('my-user', MyElement);

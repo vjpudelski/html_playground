@@ -4,6 +4,7 @@
   "description": "html website with little to no libraries and frameworks",
   "main": "index.html",
   "scripts": {
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
