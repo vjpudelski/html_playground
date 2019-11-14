@@ -22,5 +22,9 @@ let router = new Router('history', [  // eslint-disable-line no-unused-vars
   {
     name: '/usersdb',
     component: new usersdb()
+  },
+  {
+    name: '/person/:id/this/:name',
+    component: new user()
   }
 ], 'app');

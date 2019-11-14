@@ -8,6 +8,7 @@ export default class UserPage {
   init () {}
 
   render (props) {
+    console.log(props);
     let user = this.users.find(x => x.id == props.id);
     
     return /*html*/`
