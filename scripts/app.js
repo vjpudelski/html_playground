@@ -4,6 +4,7 @@ import home from '../views/home.js';
 import about from '../views/about.js';
 import user from '../views/user.js';
 import usersdb from '../views/usersdb.js';
+import login from '../views/login.js';
 
 let router = new Router('history', [  // eslint-disable-line no-unused-vars
   {
@@ -26,5 +27,9 @@ let router = new Router('history', [  // eslint-disable-line no-unused-vars
   {
     name: '/person/:id/this/:name',
     component: new user()
+  },
+  {
+    name: '/login',
+    component: new login()
   }
 ], 'app');
