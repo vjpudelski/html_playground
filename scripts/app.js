@@ -8,6 +8,7 @@ import login from '../views/login.js';
 import tables from '../views/tables.js';
 import grid from '../views/grid.js';
 import dragndrop from '../views/dragndrop.js';
+import map from '../views/map.js';
 
 let router = new Router('history', [  // eslint-disable-line no-unused-vars
   {
@@ -46,5 +47,9 @@ let router = new Router('history', [  // eslint-disable-line no-unused-vars
   {
     name: '/dragndrop',
     component: new dragndrop()
+  },
+  {
+    name: '/map',
+    component: new map()
   }
 ], 'app');
