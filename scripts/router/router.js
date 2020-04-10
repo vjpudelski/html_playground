@@ -11,36 +11,26 @@ export default class Router {
       }
     }
 
-    this.getRouteFromWindow();
+    this.goToRoute(window.location.hash);
     this.addEventListeners();
   }
 
   addEventListeners () {
     window.addEventListener('hashchange', (e) => {
-      console.log(e.target.location);
-      this.goToRoute(e.target.location.hash.substr(1));
+      this.goToRoute(e.target.location.hash);
     });
   }
 
-  getRouteFromWindow () {
-    let path = window.location.hash.substr(1);
-    if (path != '')
-    {
-      this.goToRoute(path);
-    }
-    else{
-      this.goToRoute(this.defaultRoute.name);
-    }
-  }
-
   getRouteFromPath (path) {
-    console.log('Path: ' + path);
     let route = undefined;
 
     let paramsNames = [];
     let params = {};
 
+    console.log(paramsNames);
     for(var i = 0, length = this.routes.length; i < length; i++){
+      paramsNames = [];
+
       let regexPath = this.routes[i].name.replace(/([:*])(\w+)/g, 
         (full, colon, name) => {
           paramsNames.push(name);
@@ -48,6 +38,7 @@ export default class Router {
         }) + '(?:\/|$)';      // eslint-disable-line no-useless-escape
 
       let matchPath = path.match(new RegExp(regexPath));
+
       if (matchPath !== null){
         params = matchPath
           .splice(1)
@@ -62,7 +53,6 @@ export default class Router {
       }
     }
 
-    console.log(route);
     route = route ? route : this.defaultRoute;
     return {route, params};
   }

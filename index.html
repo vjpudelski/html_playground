@@ -3,20 +3,71 @@
   <head>
     <title>My Website</title>
 <!--Icons made by "https://www.flaticon.com/authors/freepik" "Freepik" from "https://www.flaticon.com/"-->
-<link rel="icon" href="./images/domain.png" />
+    <link rel="icon" href="./images/domain.png" />
+    <script src="./components/myElement.js"></script>
+    <style>
+    /* Add a black background color to the top navigation */
+    nav {
+      background-color: #00ff00;
+      overflow: hidden;
+      border-radius: 1em;
+    }
+
+    /* Style the links inside the navigation bar */
+    nav a {
+      float: left;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
+
+    /* Change the color of links on hover */
+    nav a:hover {
+      background-color: #dddddd;
+      color: #000000;
+    }
+
+    /* Add a color to the active/current link */
+    nav a.active {
+      background-color: #4CAF50;
+      color: #0000ff;
+    }
+
+    .right {
+      float: right;
+    }
+    </style>
   </head>
   <body>
     <header>
       <nav>
-        <ul>
-          <li><a href="#/">Home</a></li>
-          <li><a href="#/about">About</a></li>
-          <li><a href="#/user/1">user</a></li>
-          <li><a href="#/usersdb">Users From DB</a></li>
-        </ul>
+        <a href="#/">Home</a>
+        <a href="#/about">About</a>
+        <a href="#/user/1">user</a>
+        <a href="#/usersdb">Users From DB</a>
+        <!-- reverse the list if floating right -->
+        <a class="right" href="#">Hello</a>
+        <a class="right" href="#">Sign In</a>
       </nav>
     </header>
+
     <div id="app"></div>
     <script type="module" src="./scripts/app.js"></script>
+    <script>
+      var anchors = document.getElementsByTagName('a');
+
+      for (var i=0; i< anchors.length; i++){
+        anchors[i].addEventListener('click', (event) => {
+          let menus = document.getElementsByClassName('active');
+          for (let k = 0; k < menus.length; k++){
+            menus[k].classList.remove('active');
+          }
+
+          event.target.classList.add('active');
+        })
+      }
+      </script>
   </body>
 </html>
