@@ -7,6 +7,7 @@ export default class Token {
     this.position	= [45,45];
     this.delayMove	= 700;
     this.cell = 40;
+    this.color = "#0000ff";
   }
 
   placeAt(x, y) {

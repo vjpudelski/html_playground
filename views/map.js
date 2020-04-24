@@ -4,7 +4,7 @@ const html = () => /*html*/`
   <canvas id="game" width="400" height="400"></canvas>
 `;
 
-export default class HomePage {
+export default class MapPage {
   constructor() {
     this.map = [
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -29,10 +29,10 @@ export default class HomePage {
 
   init () {
     this.keysDown = {
-      37 : false,
-      38 : false,
-      39 : false,
-      40 : false
+      37 : false, //left
+      38 : false, //up
+      39 : false, //right
+      40 : false  //down
     };
 
     this.drawMap();
@@ -64,15 +64,40 @@ export default class HomePage {
 
     if(!this.player.processMovement(currentFrameTime))
     {
-      if(this.keysDown[38] && this.player.tileFrom[1]>0 && this.map[this.toIndex(this.player.tileFrom[0], this.player.tileFrom[1]-1)]==1) { this.player.tileTo[1]-= 1; }
-      else if(this.keysDown[40] && this.player.tileFrom[1]<(400-1) && this.map[this.toIndex(this.player.tileFrom[0], this.player.tileFrom[1]+1)]==1) { this.player.tileTo[1]+= 1; }
-      else if(this.keysDown[37] && this.player.tileFrom[0]>0 && this.map[this.toIndex(this.player.tileFrom[0]-1, this.player.tileFrom[1])]==1) { this.player.tileTo[0]-= 1; }
-      else if(this.keysDown[39] && this.player.tileFrom[0]<(400-1) && this.map[this.toIndex(this.player.tileFrom[0]+1, this.player.tileFrom[1])]==1) { this.player.tileTo[0]+= 1; }
+      if(this.keysDown[38] && this.player.tileFrom[1]>0 
+        && this.map[this.toIndex(this.player.tileFrom[0], this.player.tileFrom[1]-1)]==1) { 
+          this.player.tileTo[1]-= 1; 
+      }
+      else if(this.keysDown[40] && this.player.tileFrom[1]<(400) 
+        && this.map[this.toIndex(this.player.tileFrom[0], this.player.tileFrom[1]+1)]==1) { 
+          this.player.tileTo[1]+= 1; 
+      }
+      else if(this.keysDown[37] && this.player.tileFrom[0]>0 
+        && this.map[this.toIndex(this.player.tileFrom[0]-1, this.player.tileFrom[1])]==1) { 
+          this.player.tileTo[0]-= 1; 
+      }
+      else if(this.keysDown[39] && this.player.tileFrom[0]<(400) 
+        && this.map[this.toIndex(this.player.tileFrom[0]+1, this.player.tileFrom[1])]==1) { 
+          this.player.tileTo[0]+= 1; 
+      }
   
-      if(this.player.tileFrom[0]!=this.player.tileTo[0] || this.player.tileFrom[1]!=this.player.tileTo[1])
-      { this.player.timeMoved = currentFrameTime; }
+      if(this.player.tileFrom[0]!=this.player.tileTo[0] || this.player.tileFrom[1]!=this.player.tileTo[1]) { 
+        this.player.timeMoved = currentFrameTime; 
+      }
     }  
 
+    this._drawTiles(ctx);
+    this._drawGridLines(ctx);
+    this._drawPlayer(ctx);
+
+    requestAnimationFrame(this.drawMap.bind(this));
+  }
+  
+  toIndex(x, y) {
+    return((y * this.mapW) + x);
+  }
+
+  _drawTiles(ctx) {
     for(var y = 0; y < this.mapH; ++y)
     {
       for(var x = 0; x < this.mapW; ++x)
@@ -89,7 +114,9 @@ export default class HomePage {
         ctx.fillRect( x*this.tileW, y*this.tileH, this.tileW, this.tileH);
       }
     }
-    
+  }
+
+  _drawGridLines(ctx) {
     for (var x = 0; x <= 400; x += 40) {
       ctx.moveTo(x, 0);
       ctx.lineTo(x, 400);
@@ -102,15 +129,11 @@ export default class HomePage {
 
     ctx.strokeStyle = "#ffffff";
     ctx.stroke();
-
-    ctx.fillStyle = "#0000ff";
-    ctx.fillRect(this.player.position[0], this.player.position[1],
-    this.player.dimensions[0], this.player.dimensions[1]);
-
-    requestAnimationFrame(this.drawMap.bind(this));
   }
-  
-  toIndex(x, y) {
-    return((y * this.mapW) + x);
+
+  _drawPlayer(ctx) {
+    ctx.fillStyle = this.player.color;
+    ctx.fillRect(this.player.position[0], this.player.position[1],
+    this.player.dimensions[0], this.player.dimensions[1]); 
   }
 }
