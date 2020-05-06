@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style>
+
+  canvas {
+    border: 1px solid #000;
+    width: 1000px;
+    height: 700px;
+  }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="1000" height="700"></canvas>
+<script type="text/javascript">
+let _color__background = "#000022";
+let _color__text = "#ccccff";
+let _color__white = "#ffffff";
+
+
+function HexagonGrid(canvasId, radius) {
+    this.radius = radius;
+
+    this.height = Math.sqrt(3) * radius;
+    this.width = 2 * radius;
+    this.side = (3 / 2) * radius;
+
+    this.canvas = document.getElementById(canvasId);
+    this.context = this.canvas.getContext('2d');
+
+    this.canvasOriginX = 0;
+    this.canvasOriginY = 0;
+    
+    //this.canvas.addEventListener("mousedown", this.clickEvent.bind(this), false);
+};
+
+HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
+    this.canvasOriginX = originX;
+    this.canvasOriginY = originY;
+    
+    var currentHexX;
+    var currentHexY;
+    var debugText = "";
+
+    var offsetColumn = false;
+
+    for (var col = 0; col < cols; col++) {
+        for (var row = 0; row < rows; row++) {
+
+            if (!offsetColumn) {
+                currentHexX = (col * this.side) + originX;
+                currentHexY = (row * this.height) + originY;
+            } else {
+                currentHexX = col * this.side + originX;
+                currentHexY = (row * this.height) + originY + (this.height * 0.5);
+            }
+
+            if (isDebug) {
+                debugText = col + "," + row;
+            }
+
+            this.drawHex(currentHexX, currentHexY, _color__background, debugText);
+        }
+        offsetColumn = !offsetColumn;
+    }
+}
+
+HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText) {
+    this.context.strokeStyle = _color__text;
+    this.context.beginPath();
+    this.context.moveTo(x0 + this.width - this.side, y0);
+    this.context.lineTo(x0 + this.side, y0);
+    this.context.lineTo(x0 + this.width, y0 + (this.height / 2));
+    this.context.lineTo(x0 + this.side, y0 + this.height);
+    this.context.lineTo(x0 + this.width - this.side, y0 + this.height);
+    this.context.lineTo(x0, y0 + (this.height / 2));
+
+    if (fillColor) {
+        this.context.fillStyle = fillColor;
+        this.context.fill();
+    }
+
+    this.context.closePath();
+    this.context.stroke();
+
+    if (debugText) {
+        this.context.font = "8px";
+        this.context.fillStyle = _color__white;
+        this.context.fillText(debugText, x0 + (this.width / 2) - (this.width/4), y0 + (this.height - 5));
+    }
+};
+
+var hexagonGrid = new HexagonGrid("canvas", 20);
+hexagonGrid.drawHexGrid(19, 33, 0, 0, true); 
+</script>
+</body>
+</html>
